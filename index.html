@@ -26,7 +26,9 @@
             font-weight: bold; text-align: center; cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s;
         }
+        .select-btn.diretora { background-color: #6a1b9a; } /* Cor diferente para a Diretora */
         .select-btn:hover { background-color: #45a049; }
+        .select-btn.diretora:hover { background-color: #5d178e; }
 
         /* Estilo do Botão WhatsApp */
         .whatsapp-btn {
@@ -45,9 +47,9 @@
     </header>
 
     <div id="selection-area" style="text-align: center; padding: 20px;">
-        <button class="select-btn" onclick="goToVideo('joao')">Mensagem do Franklin</button>
-        <button class="select-btn" onclick="goToVideo('maria')">Mensagem da Luisa</button>
-        <button class="select-btn" onclick="goToVideo('diretora')" style="background-color: #6a1b9a;">Mensagem para Déia</button>
+        <button class="select-btn" onclick="goToVideo('franklinjr')">Mensagem do Franklin Jr.</button>
+        <button class="select-btn" onclick="goToVideo('luisa')">Mensagem da Luísa</button>
+        <button class="select-btn diretora" onclick="goToVideo('deia')">Mensagem para a Prô Déia</button>
     </div>
 
     <div id="video-container">
@@ -72,12 +74,12 @@
         const pageSubtitle = document.getElementById('page-subtitle');
         const responseText = document.getElementById('response-text');
 
-        // --- VARIÁVEIS DE CONFIGURAÇÃO ---
-        const MEU_NUMERO_WHATSAPP = "5511969913506"; // Ex: 5511987654321
-        const NOME_FILHO_A = "Franklin";
-        const NOME_FILHO_B = "Luísa";
-        const NOME_DIRETORA = "Prô Déia"; 
-        // ----------------------------------
+        // --- VARIÁVEIS DE CONFIGURAÇÃO (AJUSTADAS) ---
+        const MEU_NUMERO_WHATSAPP = "5511969913506"; 
+        const NOME_FRANKLIN = "Franklin Jr.";
+        const NOME_LUISA = "Luísa";
+        const NOME_DEIA = "Prô Déia"; 
+        // ------------------------------------------------
 
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -97,24 +99,24 @@
             let videoSrc, nomeCompleto, whatsappMsg;
 
             // Lógica para cada vídeo
-            if (filho === 'joao') {
-                videoSrc = 'joao-video.mp4';
-                nomeCompleto = NOME_FILHO_A;
-                whatsappMsg = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20do%20${NOME_FILHO_A}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
-                responseText.textContent = `Gostou da surpresa? Deixe sua mensagem para ${NOME_FILHO_A} ou para a família!`;
+            if (filho === 'franklinjr') {
+                videoSrc = 'franklinjr-video.mp4';
+                nomeCompleto = NOME_FRANKLIN;
+                whatsappMsg = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20do%20${NOME_FRANKLIN}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
+                responseText.textContent = `Gostou da surpresa? Deixe sua mensagem para ${NOME_FRANKLIN} ou para a família!`;
 
-            } else if (filho === 'maria') {
-                videoSrc = 'maria-video.mp4';
-                nomeCompleto = NOME_FILHO_B;
-                whatsappMsg = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20da%20${NOME_FILHO_B}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
-                responseText.textContent = `Gostou da surpresa? Deixe sua mensagem para ${NOME_FILHO_B} ou para a família!`;
+            } else if (filho === 'luisa') {
+                videoSrc = 'luisa-video.mp4';
+                nomeCompleto = NOME_LUISA;
+                whatsappMsg = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20da%20${NOME_LUISA}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
+                responseText.textContent = `Gostou da surpresa? Deixe sua mensagem para ${NOME_LUISA} ou para a família!`;
                 
-            } else if (filho === 'diretora') {
-                videoSrc = 'diretora-video.mp4';
-                nomeCompleto = NOME_DIRETORA;
+            } else if (filho === 'deia') {
+                videoSrc = 'deia-video.mp4';
+                nomeCompleto = NOME_DEIA;
                 // Mensagem de WhatsApp mais formal/geral para a diretora
-                whatsappMsg = `Ol%C3%A1%2C%20Diretora%20${NOME_DIRETORA}%2C%20agrade%C3%A7o%20pela%20homenagem%20e%20o%20carinho%20da%20fam%C3%ADlia!`;
-                responseText.textContent = `Diretora ${NOME_DIRETORA}, envie sua mensagem para o nosso contato!`;
+                whatsappMsg = `Ol%C3%A1%2C%20${NOME_DEIA}%2C%20agrade%C3%A7o%20pela%20homenagem%20e%20o%20carinho%20da%20fam%C3%ADlia!`;
+                responseText.textContent = `${NOME_DEIA}, envie sua mensagem para o nosso contato!`;
 
             } else {
                 // Caso o parâmetro seja inválido
@@ -125,7 +127,7 @@
             }
 
             // Atualiza Título e Link
-            pageTitle.textContent = "Mensagem para a " + nomeCompleto;
+            pageTitle.textContent = "Mensagem para " + nomeCompleto;
             pageSubtitle.textContent = "Prepare-se para uma surpresa!";
             
             // Define a fonte do vídeo
