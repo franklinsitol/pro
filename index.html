@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Um Presente Especial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Estilos globais (os mesmos de antes para responsividade) */
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: flex-start; 
+            align-items: center; background-color: #fce4ec; 
+            font-family: 'Arial', sans-serif; color: #4a148c;
+        }
+        header { padding: 20px 0 10px 0; text-align: center; }
+        h1 { color: #880e4f; font-size: 1.5em; margin-bottom: 5px; }
+        
+        /* Estilos do Player e Botões */
+        #video-container { width: 100%; max-width: 650px; display: none; } /* Inicialmente escondido */
+        video { display: block; width: 100%; height: auto; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+
+        /* Estilos dos Botões de Seleção */
+        .select-btn {
+            display: block; width: 80%; max-width: 300px;
+            background-color: #4CAF50; color: white; margin: 15px auto;
+            padding: 15px; text-decoration: none; border-radius: 8px;
+            font-weight: bold; text-align: center; cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s;
+        }
+        .select-btn:hover { background-color: #45a049; }
+
+        /* Estilo do Botão WhatsApp (o mesmo de antes) */
+        .whatsapp-btn {
+            display: inline-block; background-color: #25D366; color: white; 
+            padding: 12px 25px; text-decoration: none; border-radius: 50px; 
+            font-weight: bold; font-size: 1em; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            transition: background-color 0.3s ease;
+        }
+        .whatsapp-btn:hover { background-color: #1FAF59; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="page-title">Escolha a Mensagem Especial</h1>
+        <p id="page-subtitle" style="margin-top: 5px; font-size: 0.9em;"></p>
+    </header>
+
+    <div id="selection-area" style="text-align: center; padding: 20px;">
+        <button class="select-btn" onclick="goToVideo('joao')">Mensagem do NOME_FILHO_A</button>
+        <button class="select-btn" onclick="goToVideo('maria')">Mensagem da NOME_FILHO_B</button>
+    </div>
+
+    <div id="video-container">
+        <video id="main-video" controls playsinline></video>
+        
+        <div id="interaction-area" style="text-align: center; margin-top: 30px; padding: 20px;">
+            <p style="font-size: 1.1em; margin-bottom: 20px;">
+                Gostou? Deixe sua mensagem!
+            </p>
+            <a id="whatsapp-link" target="_blank" class="whatsapp-btn">
+                Responder pelo WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const videoContainer = document.getElementById('video-container');
+        const selectionArea = document.getElementById('selection-area');
+        const mainVideo = document.getElementById('main-video');
+        const whatsappLink = document.getElementById('whatsapp-link');
+        const pageTitle = document.getElementById('page-title');
+        const pageSubtitle = document.getElementById('page-subtitle');
+
+        // --- VARIÁVEIS DE CONFIGURAÇÃO ---
+        const MEU_NUMERO_WHATSAPP = "SEU_NUMERO_COMPLETO"; // Ex: 5511987654321
+        const NOME_FILHO_A = "João";
+        const NOME_FILHO_B = "Maria";
+        // ----------------------------------
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        function goToVideo(filho) {
+            // Redireciona para a própria página com o parâmetro
+            window.location.href = window.location.pathname + '?filho=' + filho;
+        }
+
+        function loadVideo(filho) {
+            selectionArea.style.display = 'none';
+            videoContainer.style.display = 'block';
+
+            let videoSrc, nomeCompleto;
+
+            if (filho === 'joao') {
+                videoSrc = 'joao-video.mp4';
+                nomeCompleto = NOME_FILHO_A;
+            } else if (filho === 'maria') {
+                videoSrc = 'maria-video.mp4';
+                nomeCompleto = NOME_FILHO_B;
+            } else {
+                // Caso o parâmetro seja inválido, exibe a área de seleção
+                pageTitle.textContent = "Erro na Seleção";
+                pageSubtitle.textContent = "Por favor, selecione a mensagem abaixo.";
+                selectionArea.style.display = 'block';
+                return;
+            }
+
+            // Atualiza Título e Link
+            pageTitle.textContent = "Mensagem do(a) " + nomeCompleto;
+            pageSubtitle.textContent = "Prepare-se para uma surpresa!";
+            
+            // Define a fonte do vídeo
+            mainVideo.innerHTML = `<source src="${videoSrc}" type="video/mp4">Seu navegador não suporta a tag de vídeo.`;
+            mainVideo.load();
+            
+            // Define o link do WhatsApp
+            const whatsappText = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20do%20${nomeCompleto}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
+            whatsappLink.href = `https://api.whatsapp.com/send?phone=${MEU_NUMERO_WHATSAPP}&text=${whatsappText}`;
+        }
+
+        // --- LÓGICA DE INICIALIZAÇÃO ---
+        const parametroFilho = getUrlParameter('filho');
+        if (parametroFilho) {
+            // Se houver parâmetro, carrega o vídeo
+            loadVideo(parametroFilho);
+        } else {
+            // Se não houver parâmetro (primeiro acesso), mostra os botões de seleção
+            selectionArea.style.display = 'block';
+        }
+
+    </script>
+</body>
+</html>
