@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Um Presente Especial</title>
+    <title>Uma Mensagem Especial</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Estilos globais (os mesmos de antes para responsividade) */
+        /* Estilos globais */
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: flex-start; 
@@ -15,7 +15,7 @@
         h1 { color: #880e4f; font-size: 1.5em; margin-bottom: 5px; }
         
         /* Estilos do Player e Botões */
-        #video-container { width: 100%; max-width: 650px; display: none; } /* Inicialmente escondido */
+        #video-container { width: 100%; max-width: 650px; display: none; }
         video { display: block; width: 100%; height: auto; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
 
         /* Estilos dos Botões de Seleção */
@@ -28,7 +28,7 @@
         }
         .select-btn:hover { background-color: #45a049; }
 
-        /* Estilo do Botão WhatsApp (o mesmo de antes) */
+        /* Estilo do Botão WhatsApp */
         .whatsapp-btn {
             display: inline-block; background-color: #25D366; color: white; 
             padding: 12px 25px; text-decoration: none; border-radius: 50px; 
@@ -45,15 +45,16 @@
     </header>
 
     <div id="selection-area" style="text-align: center; padding: 20px;">
-        <button class="select-btn" onclick="goToVideo('joao')">Mensagem do NOME_FILHO_A</button>
-        <button class="select-btn" onclick="goToVideo('maria')">Mensagem da NOME_FILHO_B</button>
+        <button class="select-btn" onclick="goToVideo('joao')">Mensagem do Franklin</button>
+        <button class="select-btn" onclick="goToVideo('maria')">Mensagem da Luisa</button>
+        <button class="select-btn" onclick="goToVideo('diretora')" style="background-color: #6a1b9a;">Mensagem para Déia</button>
     </div>
 
     <div id="video-container">
         <video id="main-video" controls playsinline></video>
         
         <div id="interaction-area" style="text-align: center; margin-top: 30px; padding: 20px;">
-            <p style="font-size: 1.1em; margin-bottom: 20px;">
+            <p id="response-text" style="font-size: 1.1em; margin-bottom: 20px;">
                 Gostou? Deixe sua mensagem!
             </p>
             <a id="whatsapp-link" target="_blank" class="whatsapp-btn">
@@ -69,11 +70,13 @@
         const whatsappLink = document.getElementById('whatsapp-link');
         const pageTitle = document.getElementById('page-title');
         const pageSubtitle = document.getElementById('page-subtitle');
+        const responseText = document.getElementById('response-text');
 
         // --- VARIÁVEIS DE CONFIGURAÇÃO ---
-        const MEU_NUMERO_WHATSAPP = "SEU_NUMERO_COMPLETO"; // Ex: 5511987654321
-        const NOME_FILHO_A = "João";
-        const NOME_FILHO_B = "Maria";
+        const MEU_NUMERO_WHATSAPP = "5511969913506"; // Ex: 5511987654321
+        const NOME_FILHO_A = "Franklin";
+        const NOME_FILHO_B = "Luísa";
+        const NOME_DIRETORA = "Prô Déia"; 
         // ----------------------------------
 
         function getUrlParameter(name) {
@@ -84,7 +87,6 @@
         }
 
         function goToVideo(filho) {
-            // Redireciona para a própria página com o parâmetro
             window.location.href = window.location.pathname + '?filho=' + filho;
         }
 
@@ -92,16 +94,30 @@
             selectionArea.style.display = 'none';
             videoContainer.style.display = 'block';
 
-            let videoSrc, nomeCompleto;
+            let videoSrc, nomeCompleto, whatsappMsg;
 
+            // Lógica para cada vídeo
             if (filho === 'joao') {
                 videoSrc = 'joao-video.mp4';
                 nomeCompleto = NOME_FILHO_A;
+                whatsappMsg = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20do%20${NOME_FILHO_A}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
+                responseText.textContent = `Gostou da surpresa? Deixe sua mensagem para ${NOME_FILHO_A} ou para a família!`;
+
             } else if (filho === 'maria') {
                 videoSrc = 'maria-video.mp4';
                 nomeCompleto = NOME_FILHO_B;
+                whatsappMsg = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20da%20${NOME_FILHO_B}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
+                responseText.textContent = `Gostou da surpresa? Deixe sua mensagem para ${NOME_FILHO_B} ou para a família!`;
+                
+            } else if (filho === 'diretora') {
+                videoSrc = 'diretora-video.mp4';
+                nomeCompleto = NOME_DIRETORA;
+                // Mensagem de WhatsApp mais formal/geral para a diretora
+                whatsappMsg = `Ol%C3%A1%2C%20Diretora%20${NOME_DIRETORA}%2C%20agrade%C3%A7o%20pela%20homenagem%20e%20o%20carinho%20da%20fam%C3%ADlia!`;
+                responseText.textContent = `Diretora ${NOME_DIRETORA}, envie sua mensagem para o nosso contato!`;
+
             } else {
-                // Caso o parâmetro seja inválido, exibe a área de seleção
+                // Caso o parâmetro seja inválido
                 pageTitle.textContent = "Erro na Seleção";
                 pageSubtitle.textContent = "Por favor, selecione a mensagem abaixo.";
                 selectionArea.style.display = 'block';
@@ -109,7 +125,7 @@
             }
 
             // Atualiza Título e Link
-            pageTitle.textContent = "Mensagem do(a) " + nomeCompleto;
+            pageTitle.textContent = "Mensagem para a " + nomeCompleto;
             pageSubtitle.textContent = "Prepare-se para uma surpresa!";
             
             // Define a fonte do vídeo
@@ -117,8 +133,7 @@
             mainVideo.load();
             
             // Define o link do WhatsApp
-            const whatsappText = `Ol%C3%A1%2C%20muito%20obrigada%20pela%20mensagem%20do%20${nomeCompleto}!%20Fiquei%20muito%20feliz%20com%20o%20carinho!`;
-            whatsappLink.href = `https://api.whatsapp.com/send?phone=${MEU_NUMERO_WHATSAPP}&text=${whatsappText}`;
+            whatsappLink.href = `https://api.whatsapp.com/send?phone=${MEU_NUMERO_WHATSAPP}&text=${whatsappMsg}`;
         }
 
         // --- LÓGICA DE INICIALIZAÇÃO ---
